@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import TokenModel from '../models/tokenModel.js';
+import tokenModel from '../models/tokenModel.js';
 
 class TokenService {
     generateTokens(payload) {
@@ -20,6 +21,11 @@ class TokenService {
 
         const token = await TokenModel.create({user: userId, refreshToken});
         return token;
+    }
+
+    async removeToken (refreshToken) {
+        const tokenData = tokenModel.deleteOne({refreshToken});
+        return tokenData;
     }
 }
 
