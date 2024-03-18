@@ -3,20 +3,20 @@ import nodemailer from 'nodemailer';
 class MailService {
     constructor() {
         this.transporter = nodemailer.createTransport({
-            host: 'smtp.ukr.net',
-            port: 465,
+            host: 'smtp.mailersend.net',
+            port: process.env.SMTP_PORT,
             secure: false,
             auth: {
-                user: 'ovikhukieian@ukr.net',
-                pass: 'ByLlt580YYfmSYei'
+                user: 'MS_Js9g6F@trial-3z0vklo8y0e47qrx.mlsender.net',
+                pass: 'W0mlg3IfIvTywBcR'
             }
         })
     }
     async sendActivationMail(to, link) {
         await this.transporter.sendMail({
-            from: 'ovikhukieian@ukr.net',
+            from: 'MS_Js9g6F@trial-3z0vklo8y0e47qrx.mlsender.net',
             to,
-            subject: 'Email activation',
+            subject: 'Email activation for ' + process.env.API_URL,
             text: '',
             html:
                 `
@@ -26,8 +26,6 @@ class MailService {
                     </div>
                 `
 
-        }, (err) => {
-            console.log(err)
         })
     }
 }
