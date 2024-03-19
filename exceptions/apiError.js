@@ -8,7 +8,7 @@ export default class ApiError extends Error {
         this.errors = errors;
     }
 
-    static UnautorizedError() {
+    static UnauthorizedError() {
         return new ApiError(401, 'This user is not autorized')
     }
 
