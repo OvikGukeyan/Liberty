@@ -28,6 +28,22 @@ class MailService {
 
         })
     }
+
+    async sendContactForm(email) {
+        await this.transporter.sendMail({
+            from: 'MS_Js9g6F@trial-3z0vklo8y0e47qrx.mlsender.net',
+            to: '0953188061ovik@gmail.com',
+            subject: 'Contact form for' + email,
+            text: '',
+            html:
+                `
+                    <div>
+                        <h1>${email}</h1>
+                    </div>
+                `
+
+        })
+    }
 }
 
 export default new MailService();

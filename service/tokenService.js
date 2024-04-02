@@ -28,7 +28,7 @@ class TokenService {
         } catch (error) {
             return null;
         }
-    }
+    };
 
     async saveToken (userId, refreshToken) {
         const tokenData = await TokenModel.findOne({user: userId});
