@@ -1,5 +1,5 @@
 import UserModel from "../models/userModel.js";
-import bcrypt from 'bcrypt';
+import bcryptjs from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import mailService from "./mailService.js";
 import tokenService from "./tokenService.js";
@@ -14,7 +14,7 @@ class UserService {
             throw ApiError.BadRequest(`User with email ${email} already exists`)
         }
         const activationLink = uuidv4();
-        const hashPassword = await bcrypt.hash(password, 3);
+        const hashPassword = await bcryptjs.hash(password, 3);
         const user = await UserModel.create({ email, password: hashPassword, activationLink })
         await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
 
@@ -41,7 +41,7 @@ class UserService {
         if (!user) {
             throw ApiError.BadRequest('There is no user with such email!')
         };
-        const isPassEqual = await bcrypt.compare(password, user.password);
+        const isPassEqual = await bcryptjs.compare(password, user.password);
         if (!isPassEqual) {
             throw ApiError.BadRequest('Wrong password or email!')
         };
