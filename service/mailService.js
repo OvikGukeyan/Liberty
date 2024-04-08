@@ -12,6 +12,8 @@ class MailService {
             }
         })
     }
+
+
     async sendActivationMail(to, link) {
         await this.transporter.sendMail({
             from: 'MS_Js9g6F@trial-3z0vklo8y0e47qrx.mlsender.net',
@@ -29,19 +31,33 @@ class MailService {
         })
     }
 
-    async sendContactForm(email) {
+    async sendContactForm(data) {
         await this.transporter.sendMail({
             from: 'MS_Js9g6F@trial-3z0vklo8y0e47qrx.mlsender.net',
             to: '0953188061ovik@gmail.com',
-            subject: 'Contact form for' + email,
+            subject: 'Contact form for ' + data.emailAdress,
             text: '',
             html:
                 `
                     <div>
-                        <h1>${email}</h1>
+                        <ul>
+                            <li>Manager: ${data.manager}</li>
+                            <li>Anrede: ${data.salutation}</li>
+                            <li>Titel: ${data.titel}</li>
+                            <li>Vorname: ${data.firstName}</li>
+                            <li>Nachname: ${data.lastName}</li>
+                            <li>Email: ${data.emailAdress}</li>
+                            <li>Mobil: ${data.phoneNumber}</li>
+                            <li>Straße: ${data.adress}</li>
+                            <li>PLZ: ${data.zipCode}</li>
+                            <li>Ort: ${data.city}</li>
+                            <li>Land: ${data.country}</li>
+                            <li>Thema: ${data.topic}</li>
+                            <li>Bemerkung: ${data.description}</li>
+                            <li>Check: ${data.check}</li>
+                        </ul>
                     </div>
                 `
-
         })
     }
 }
