@@ -11,7 +11,7 @@ class MailService {
                 pass: 'W0mlg3IfIvTywBcR'
             }
         })
-    }
+    };
 
 
     async sendActivationMail(to, link) {
@@ -58,6 +58,24 @@ class MailService {
                         </ul>
                     </div>
                 `
+        })
+    };
+
+
+    async sendNotificationMail(to) {
+        await this.transporter.sendMail({
+            from: 'MS_Js9g6F@trial-3z0vklo8y0e47qrx.mlsender.net',
+            to,
+            subject: 'Contact formular' ,
+            text: '',
+            html:
+                `
+                    <div>
+                        <h1>Vielen Dank für Ihr Vertrauen.<br />
+                        Wir kümmern uns schnellstmöglich um Ihr Anliegen</h1>
+                    </div>
+                `
+
         })
     }
 }
