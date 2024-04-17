@@ -34,7 +34,7 @@ class MailService {
     async sendContactForm(data) {
         await this.transporter.sendMail({
             from: 'noreply@libertyfinanz.de',
-            to: '0953188061ovik@gmail.com',
+            to: 'info@libertyfinanz.de',
             subject: 'Contact form for ' + data.emailAdress,
             text: '',
             html:
