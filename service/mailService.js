@@ -3,12 +3,12 @@ import nodemailer from 'nodemailer';
 class MailService {
     constructor() {
         this.transporter = nodemailer.createTransport({
-            host: 'smtp.mailersend.net',
+            host: 'smtp.strato.de',
             port: process.env.SMTP_PORT,
             secure: false,
             auth: {
-                user: 'MS_Js9g6F@trial-3z0vklo8y0e47qrx.mlsender.net',
-                pass: 'W0mlg3IfIvTywBcR'
+                user: 'noreply@libertyfinanz.de',
+                pass: 'ceqme6-donxyn-xyvVem'
             }
         })
     };
@@ -16,7 +16,7 @@ class MailService {
 
     async sendActivationMail(to, link) {
         await this.transporter.sendMail({
-            from: 'MS_Js9g6F@trial-3z0vklo8y0e47qrx.mlsender.net',
+            from: 'noreply@libertyfinanz.de',
             to,
             subject: 'Email activation for ' + process.env.API_URL,
             text: '',
@@ -33,7 +33,7 @@ class MailService {
 
     async sendContactForm(data) {
         await this.transporter.sendMail({
-            from: 'MS_Js9g6F@trial-3z0vklo8y0e47qrx.mlsender.net',
+            from: 'noreply@libertyfinanz.de',
             to: '0953188061ovik@gmail.com',
             subject: 'Contact form for ' + data.emailAdress,
             text: '',
@@ -64,7 +64,7 @@ class MailService {
 
     async sendNotificationMail(to) {
         await this.transporter.sendMail({
-            from: 'MS_Js9g6F@trial-3z0vklo8y0e47qrx.mlsender.net',
+            from: 'noreply@libertyfinanz.de',
             to,
             subject: 'Contact formular' ,
             text: '',
