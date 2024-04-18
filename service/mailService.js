@@ -1,44 +1,42 @@
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
+
 
 class MailService {
-    constructor() {
-        this.transporter = nodemailer.createTransport({
-            host: 'smtp.strato.de',
-            port: process.env.SMTP_PORT,
-            secure: false,
-            auth: {
-                user: 'noreply@libertyfinanz.de',
-                pass: 'ceqme6-donxyn-xyvVem'
-            }
-        })
-    };
+    
+  constructor() {
+    this.transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: false,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASSWORD,
+      },
+    });
+  }
 
-
-    async sendActivationMail(to, link) {
-        await this.transporter.sendMail({
-            from: 'noreply@libertyfinanz.de',
-            to,
-            subject: 'Email activation for ' + process.env.API_URL,
-            text: '',
-            html:
-                `
+  async sendActivationMail(to, link) {
+    await this.transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to,
+      subject: "Email activation for " + process.env.API_URL,
+      text: "",
+      html: `
                     <div>
                         <h1>To activate follow the link</h1>
                         <a href="${link}"> ${link} </a>
                     </div>
-                `
+                `,
+    });
+  }
 
-        })
-    }
-
-    async sendContactForm(data) {
-        await this.transporter.sendMail({
-            from: 'noreply@libertyfinanz.de',
-            to: 'info@libertyfinanz.de',
-            subject: 'Contact form for ' + data.emailAdress,
-            text: '',
-            html:
-                `
+  async sendContactForm(data) {
+    await this.transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to: 'info@libertyfinanz.de',
+      subject: "Contact form for " + data.emailAdress,
+      text: "",
+      html: `
                     <div>
                         <ul>
                             <li>Manager: ${data.manager}</li>
@@ -57,27 +55,24 @@ class MailService {
                             <li>Check: ${data.check}</li>
                         </ul>
                     </div>
-                `
-        })
-    };
+                `,
+    });
+  }
 
-
-    async sendNotificationMail(to) {
-        await this.transporter.sendMail({
-            from: 'noreply@libertyfinanz.de',
-            to,
-            subject: 'Contact formular' ,
-            text: '',
-            html:
-                `
+  async sendNotificationMail(to) {
+    await this.transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to,
+      subject: "Contact formular",
+      text: "",
+      html: `
                     <div>
                         <h1>Vielen Dank für Ihr Vertrauen.<br />
                         Wir kümmern uns schnellstmöglich um Ihr Anliegen</h1>
                     </div>
-                `
-
-        })
-    }
+                `,
+    });
+  }
 }
 
 export default new MailService();
