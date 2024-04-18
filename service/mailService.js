@@ -1,5 +1,7 @@
 import nodemailer from "nodemailer";
+import dotenv from 'dotenv';
 
+dotenv.config();
 
 class MailService {
     
@@ -19,7 +21,7 @@ class MailService {
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
       to,
-      subject: "Email activation for " + process.env.API_URL,
+      subject: "Email activation",
       text: "",
       html: `
                     <div>
@@ -33,7 +35,8 @@ class MailService {
   async sendContactForm(data) {
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
-      to: 'info@libertyfinanz.de',
+      to: process.env.MAIL_OFICE,
+
       subject: "Contact form for " + data.emailAdress,
       text: "",
       html: `
