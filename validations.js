@@ -8,7 +8,8 @@ export const registrationValidation = [
 export const formValidation = [
     body('manager')
         .isString()
-        .withMessage('Manager must be a string'),
+        .withMessage('Manager must be a string')
+        .optional(),
     body('salutation')
         .isString()
         .withMessage('Salutation must be a string'),
