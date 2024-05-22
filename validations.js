@@ -53,3 +53,46 @@ export const formValidation = [
         .isBoolean()
         .withMessage('Check must be a boolean value'),
 ];
+
+export const applicationFormValidation = [
+    body('firstName')
+        .isString()
+        .withMessage('First name must be a string'),
+    body('lastName')
+        .isString()
+        .withMessage('Last name must be a string'),
+    body('emailAddress')
+        .isEmail()
+        .withMessage('Invalid email address')
+        .normalizeEmail(),
+    body('phoneNumber')
+        .isString()
+        .withMessage('Phone number must be a string'),
+    body('description')
+        .isString()
+        .withMessage('Description must be a string')
+        .optional(),
+    body('communicationMethod')
+        .isString()
+        .withMessage('communicationMethod must be a string'),
+    body('check')
+        .isBoolean()
+        .withMessage('Check must be a boolean value'),
+];
+
+export const bookingValidation = [
+    body('date').isISO8601().toDate().withMessage('Invalid date format'),
+    body('room').isString().withMessage('Room must be a string'),
+    body('hours').isArray().withMessage('Hours must be an array').custom((value) => {
+        if (!Array.isArray(value)) {
+            throw new Error('Hours must be an array');
+        }
+        for (const hour of value) {
+            if (typeof hour !== 'string') {
+                throw new Error('Each hour must be a string');
+            }
+        }
+        return true;
+    }),
+    body('userId').isMongoId().withMessage('Invalid user ID')
+];

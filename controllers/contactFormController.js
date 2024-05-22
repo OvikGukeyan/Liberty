@@ -18,6 +18,22 @@ class ContactFormController {
             next(error)
         }
     }
+
+
+    async sendApplicationForm(req, res, next) {
+        try {
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return next(ApiError.BadRequest('Validation error', errors.array()))
+            }
+            const formData = await mailService.sendApplicationForm(req.body);
+
+            return res.json(formData)
+        } catch (error) {
+            next(error)
+        }
+    }
+    
 }
 
 export default new ContactFormController;

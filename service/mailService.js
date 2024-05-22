@@ -60,6 +60,29 @@ class MailService {
                     </div>
                 `,
     });
+  };
+
+  async sendApplicationForm(data) {
+    await this.transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to: process.env.MAIL_OFICE,
+
+      subject: "Application Form from" + data.emailAddress,
+      text: "",
+      html: `
+                    <div>
+                        <ul>
+                            <li>Vorname: ${data.firstName}</li>
+                            <li>Nachname: ${data.lastName}</li>
+                            <li>Email: ${data.emailAddress}</li>
+                            <li>Mobil: ${data.phoneNumber}</li>
+                            <li>Communication method: ${data.communicationMethod}</li>
+                            <li>Bemerkung: ${data.description}</li>
+                            <li>Check: ${data.check}</li>
+                        </ul>
+                    </div>
+                `,
+    });
   }
 
   async sendNotificationMail(to) {
