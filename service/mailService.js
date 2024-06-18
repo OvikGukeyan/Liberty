@@ -1,10 +1,9 @@
 import nodemailer from "nodemailer";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 
 class MailService {
-    
   constructor() {
     this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
@@ -60,7 +59,7 @@ class MailService {
                     </div>
                 `,
     });
-  };
+  }
 
   async sendApplicationForm(data) {
     await this.transporter.sendMail({
@@ -97,6 +96,27 @@ class MailService {
                         Wir kümmern uns schnellstmöglich um Ihr Anliegen</h1>
                     </div>
                 `,
+    });
+  }
+
+  async sendBookingBill(to, pdfBytes) {
+    await this.transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to,
+      subject: "'Your Booking Bill",
+      text: "",
+      html: `
+                    <div>
+                        <h1>Please find attached the bill for your booking.</h1>
+                    </div>
+                `,
+      attachments: [
+        {
+          filename: "bill.pdf",
+          content: pdfBytes,
+          contentType: "application/pdf",
+        },
+      ],
     });
   }
 }

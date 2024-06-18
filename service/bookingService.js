@@ -1,9 +1,11 @@
 import bookingModel from "../models/bookingModel.js";
 import ApiError from "../exceptions/apiError.js";
+import userModel from "../models/userModel.js";
+import mailService from "./mailService.js";
+import pdfService from "./pdfService.js";
 
 class BookingService {
   async getAllBookings() {
-
     const bookings = await bookingModel.find();
     return bookings;
   }
@@ -30,8 +32,20 @@ class BookingService {
         "Some of the selected hours are already booked in this room."
       );
     }
+    
+    const user = await userModel.findById(userId)
 
-    const booking = await bookingModel.create({ date, hours, room, user: userId });
+    const booking = await bookingModel.create({
+      date,
+      hours,
+      room,
+      user: userId,
+    });
+
+    const pdfBill = await pdfService.createBill({date, hours, room, firstName: user.firstName, lastName: user.lastName})
+
+    mailService.sendBookingBill(user.email, pdfBill)
+
     return booking;
   }
 }

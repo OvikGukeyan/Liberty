@@ -17,7 +17,7 @@ router.post('/contact', formValidation, ContactFormController.sendForm);
 router.post('/job', applicationFormValidation, ContactFormController.sendApplicationForm);
 
 router.get('/bookings', BookingController.getBookings);
-router.post('/book', bookingValidation, BookingController.addBooking);
+router.post('/book', authMiddleware, bookingValidation, BookingController.addBooking);
 
 
 

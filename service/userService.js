@@ -8,14 +8,15 @@ import ApiError from "../exceptions/apiError.js";
 import userModel from "../models/userModel.js";
 
 class UserService {
-    async registration(email, password) {
+    async registration(body) {
+        const {email, password, firstName, lastName, phone, address, city, zipCode, country} = body;
         const candidate = await UserModel.findOne({ email })
         if (candidate) {
             throw ApiError.BadRequest(`User with email ${email} already exists`)
         }
         const activationLink = uuidv4();
         const hashPassword = await bcryptjs.hash(password, 3);
-        const user = await UserModel.create({ email, password: hashPassword, activationLink })
+        const user = await UserModel.create({ email, password: hashPassword, firstName, lastName, phone, address, city, zipCode, country , activationLink })
         await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
 
         const userDto = new UserDto(user);
