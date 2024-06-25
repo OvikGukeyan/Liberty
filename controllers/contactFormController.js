@@ -27,8 +27,8 @@ class ContactFormController {
             if(!errors.isEmpty()) {
                 return next(ApiError.BadRequest('Validation error', errors.array()))
             }
-            const formData = await mailService.sendApplicationForm(req.body);
-
+            const cvFile = req.file
+            const formData = await mailService.sendApplicationForm(req.body, cvFile);
             return res.json(formData)
         } catch (error) {
             next(error)

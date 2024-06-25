@@ -3,6 +3,7 @@ import ApiError from "../exceptions/apiError.js";
 import userModel from "../models/userModel.js";
 import mailService from "./mailService.js";
 import pdfService from "./pdfService.js";
+import counterService from "./counterService.js";
 
 class BookingService {
   async getAllBookings() {
@@ -10,7 +11,7 @@ class BookingService {
     return bookings;
   }
 
-  async addBooking(date, hours, room, userId) {
+  async addBooking(date, hours, room, userId, paymentMethod, additions) {
     const checkBookingConflict = async (date, hours, room) => {
       const bookings = await bookingModel.find({ date: date, room: room });
       if (bookings && bookings.length > 0) {
@@ -34,12 +35,15 @@ class BookingService {
     }
     
     const user = await userModel.findById(userId)
-
+    const newInvoiceNumber = await counterService.getNextInvoiceNumber()
     const booking = await bookingModel.create({
       date,
       hours,
       room,
+      additions,
+      paymentMethod,
       user: userId,
+      invoiceNumber: newInvoiceNumber
     });
 
     const pdfBill = await pdfService.createBill({date, hours, room, firstName: user.firstName, lastName: user.lastName})

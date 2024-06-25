@@ -5,11 +5,15 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import router from './router/index.js';
 import errorMiddleware from './middlewares/errorMiddleware.js';
+import { scheduleCronJobs } from './service/cronService.js';
 
 dotenv.config()
 
 const PORT = process.env.PORT || 7777;
 const app = express();
+
+
+
 
 app.use(express.json());
 app.use(cors({
@@ -20,10 +24,11 @@ app.use(cookieParser());
 app.use('/api', router);
 app.use(errorMiddleware);
 
+
 const start = async() => {
     try {
         mongoose.connect(process.env.DB_URL)
-
+        scheduleCronJobs()
         app.listen(PORT, () => {
             console.log(`Server started on localhost:${PORT}/`)
         })

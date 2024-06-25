@@ -120,5 +120,22 @@ export const bookingValidation = [
         }
         return true;
     }),
-    body('userId').isMongoId().withMessage('Invalid user ID')
+    body('userId').isMongoId().withMessage('Invalid user ID'),
+    body('additions').custom((value) => {
+        if (typeof value !== 'object' || value === null) {
+            throw new Error('Additions must be an object');
+        }
+        const { coffee, girls, music } = value;
+        if (typeof coffee !== 'boolean') {
+            throw new Error('Additions.coffee must be a boolean');
+        }
+        if (typeof girls !== 'boolean') {
+            throw new Error('Additions.girls must be a boolean');
+        }
+        if (typeof music !== 'boolean') {
+            throw new Error('Additions.music must be a boolean');
+        }
+        return true;
+    }),
+    body('paymentMethod').isString().withMessage('Payment method must be a string')
 ];

@@ -11,8 +11,8 @@ class BookingController {
             if(!errors.isEmpty()) {
                 return next(ApiError.BadRequest('Validation error', errors.array()))
             }
-            const {room, date, hours, userId} = req.body;
-            const bookingData = await bookingService.addBooking(date, hours, room, userId);
+            const {room, date, hours, userId, additions, paymentMethod} = req.body;
+            const bookingData = await bookingService.addBooking(date, hours, room, userId, paymentMethod, additions);
             return res.json(bookingData);
         } catch (error) {
             next(error)

@@ -61,7 +61,7 @@ class MailService {
     });
   }
 
-  async sendApplicationForm(data) {
+  async sendApplicationForm(data, cvFile) {
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
       to: process.env.MAIL_OFICE,
@@ -81,10 +81,16 @@ class MailService {
                         </ul>
                     </div>
                 `,
+      attachments: [
+        {
+          filename: cvFile.originalname,
+          content: cvFile,
+        },
+      ],
     });
   }
-
-  async sendNotificationMail(to) {
+  
+  async sendNotificationMail(to, emailText) {
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
       to,
@@ -92,8 +98,7 @@ class MailService {
       text: "",
       html: `
                     <div>
-                        <h1>Vielen Dank für Ihr Vertrauen.<br />
-                        Wir kümmern uns schnellstmöglich um Ihr Anliegen</h1>
+                        <h1>${emailText}</h1>
                     </div>
                 `,
     });
