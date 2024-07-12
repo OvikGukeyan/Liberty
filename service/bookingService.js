@@ -11,11 +11,11 @@ class BookingService {
     return bookings;
   }
 
-  async addBooking(date, hours, room, userId, paymentMethod, additions) {
+  async addBookings(bookings) {
     const checkBookingConflict = async (date, hours, room) => {
-      const bookings = await bookingModel.find({ date: date, room: room });
-      if (bookings && bookings.length > 0) {
-        for (const booking of bookings) {
+      const existingBookings = await bookingModel.find({ date: date, room: room });
+      if (existingBookings && existingBookings.length > 0) {
+        for (const booking of existingBookings) {
           for (const hour of hours) {
             if (booking.hours.includes(hour)) {
               return true; // Найдено пересечение
@@ -25,33 +25,68 @@ class BookingService {
       }
       return false; // Пересечений нет
     };
-
-    const conflict = await checkBookingConflict(date, hours, room);
-
-    if (conflict) {
-      throw ApiError.BadRequest(
-        "Some of the selected hours are already booked in this room."
-      );
+  
+    const processBooking = async (booking, userId, invoiceNumber) => {
+      const { date, hours, room, paymentMethod, numberOfVisitors, additions } = booking;
+      const conflict = await checkBookingConflict(date, hours, room);
+  
+      if (conflict) {
+        throw ApiError.BadRequest(
+          "Some of the selected hours are already booked in this room."
+        );
+      }
+  
+      return bookingModel.create({
+        date,
+        hours,
+        room,
+        additions,
+        paymentMethod,
+        numberOfVisitors,
+        user: userId,
+        invoiceNumber
+      });
+    };
+  
+    const userId = bookings[0].userId;
+    const user = await userModel.findById(userId);
+  
+    // Объединяем операции в транзакцию, чтобы избежать дублирования invoiceNumber
+    const session = await bookingModel.startSession();
+    session.startTransaction();
+  
+    try {
+      const newInvoiceNumber = await counterService.getNextInvoiceNumber();
+  
+      const bookingPromises = bookings.map(booking => processBooking(booking, userId, newInvoiceNumber));
+      const newBookings = await Promise.all(bookingPromises);
+  
+      // const allDates = bookings.map(booking => booking.date).join(', ');
+      // const allHours = bookings.flatMap(booking => booking.hours);
+      // const allRooms = bookings.map(booking => booking.room).join(', ');
+  
+      // const pdfBill = await pdfService.createBill({
+      //   date: allDates,
+      //   hours: allHours,
+      //   room: allRooms,
+      //   firstName: user.firstName,
+      //   lastName: user.lastName
+      // });
+  
+      // await mailService.sendBookingBill(user.email, pdfBill);
+  
+      await session.commitTransaction();
+      session.endSession();
+  
+      return newBookings;
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      throw error;
     }
-    
-    const user = await userModel.findById(userId)
-    const newInvoiceNumber = await counterService.getNextInvoiceNumber()
-    const booking = await bookingModel.create({
-      date,
-      hours,
-      room,
-      additions,
-      paymentMethod,
-      user: userId,
-      invoiceNumber: newInvoiceNumber
-    });
-
-    const pdfBill = await pdfService.createBill({date, hours, room, firstName: user.firstName, lastName: user.lastName})
-
-    mailService.sendBookingBill(user.email, pdfBill)
-
-    return booking;
   }
+  
+  
 }
 
 export default new BookingService();

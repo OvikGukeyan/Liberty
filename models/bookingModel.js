@@ -8,8 +8,8 @@ const BookingSchema = new Schema ({
     room: {type: String, required: true},
     paymentMethod: {type: String, required: true},
     additions: {type: Object},
-    invoiceNumber: { type: Number, unique: true }
+    invoiceNumber: { type: Number}
 
 })
 
-export default model('Boking', BookingSchema);
+export default model('Booking', BookingSchema);

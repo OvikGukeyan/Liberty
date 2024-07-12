@@ -107,9 +107,10 @@ export const applicationFormValidation = [
 ];
 
 export const bookingValidation = [
-    body('date').isISO8601().toDate().withMessage('Invalid date format'),
-    body('room').isString().withMessage('Room must be a string'),
-    body('hours').isArray().withMessage('Hours must be an array').custom((value) => {
+    body().isArray().withMessage('Input must be an array of booking items'),
+    body('*.date').isISO8601().toDate().withMessage('Invalid date format'),
+    body('*.room').isString().withMessage('Room must be a string'),
+    body('*.hours').isArray().withMessage('Hours must be an array').custom((value) => {
         if (!Array.isArray(value)) {
             throw new Error('Hours must be an array');
         }
@@ -120,8 +121,7 @@ export const bookingValidation = [
         }
         return true;
     }),
-    body('userId').isMongoId().withMessage('Invalid user ID'),
-    body('additions').custom((value) => {
+    body('*.additions').custom((value) => {
         if (typeof value !== 'object' || value === null) {
             throw new Error('Additions must be an object');
         }
@@ -137,5 +137,7 @@ export const bookingValidation = [
         }
         return true;
     }),
-    body('paymentMethod').isString().withMessage('Payment method must be a string')
+    body('*.paymentMethod').isString().withMessage('Payment method must be a string'),
+    body('*.numberOfVisitors').isInt({ min: 1 }).withMessage('Number of visitors must be at least 1'),
+    body('*.userId').isString().withMessage('User Id must be a string')
 ];
