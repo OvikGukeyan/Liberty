@@ -13,6 +13,9 @@ const UserSchema = new Schema({
     country: {type: String, required: true},
     isActivated: {type: Boolean, default: false},
     activationLink: {type: String}
+},
+{
+    timestamps: true
 });
 
 export default model('User', UserSchema);

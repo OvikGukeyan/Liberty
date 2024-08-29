@@ -7,7 +7,6 @@ export const scheduleCronJobs = async () => {
   
     // Schedule a task to run daily at a specific time (e.g., midnight)
     cron.schedule('0 0 * * *', async () => {
-        console.log(1)
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
       const startOfDay = new Date(tomorrow.setHours(0, 0, 0, 0));

@@ -1,9 +1,9 @@
 import bookingModel from "../models/bookingModel.js";
 import ApiError from "../exceptions/apiError.js";
 import userModel from "../models/userModel.js";
-import mailService from "./mailService.js";
-import pdfService from "./pdfService.js";
 import counterService from "./counterService.js";
+import orderModel from "../models/orderModel.js";
+import orderService from "./orderService.js";
 
 class BookingService {
   async getAllBookings() {
@@ -25,17 +25,17 @@ class BookingService {
       }
       return false; // Пересечений нет
     };
-  
+
     const processBooking = async (booking, userId, invoiceNumber) => {
       const { date, hours, room, paymentMethod, numberOfVisitors, additions } = booking;
       const conflict = await checkBookingConflict(date, hours, room);
-  
+
       if (conflict) {
         throw ApiError.BadRequest(
           "Some of the selected hours are already booked in this room."
         );
       }
-  
+
       return bookingModel.create({
         date,
         hours,
@@ -47,24 +47,25 @@ class BookingService {
         invoiceNumber
       });
     };
-  
+
     const userId = bookings[0].userId;
-    const user = await userModel.findById(userId);
-  
+    // const user = await userModel.findById(userId);
+
     // Объединяем операции в транзакцию, чтобы избежать дублирования invoiceNumber
     const session = await bookingModel.startSession();
     session.startTransaction();
-  
+
     try {
       const newInvoiceNumber = await counterService.getNextInvoiceNumber();
-  
+
       const bookingPromises = bookings.map(booking => processBooking(booking, userId, newInvoiceNumber));
       const newBookings = await Promise.all(bookingPromises);
-  
+      const order = await orderService.addOrder(newBookings);
+
       // const allDates = bookings.map(booking => booking.date).join(', ');
       // const allHours = bookings.flatMap(booking => booking.hours);
       // const allRooms = bookings.map(booking => booking.room).join(', ');
-  
+
       // const pdfBill = await pdfService.createBill({
       //   date: allDates,
       //   hours: allHours,
@@ -72,21 +73,21 @@ class BookingService {
       //   firstName: user.firstName,
       //   lastName: user.lastName
       // });
-  
+
       // await mailService.sendBookingBill(user.email, pdfBill);
-  
+
       await session.commitTransaction();
       session.endSession();
-  
-      return newBookings;
+
+      return order;
     } catch (error) {
       await session.abortTransaction();
       session.endSession();
       throw error;
     }
   }
-  
-  
+
+
 }
 
 export default new BookingService();
