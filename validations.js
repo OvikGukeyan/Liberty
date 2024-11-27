@@ -49,7 +49,7 @@ export const formValidation = [
     body('lastName')
         .isString()
         .withMessage('Last name must be a string'),
-    body('emailAddress')
+    body('email')
         .isEmail()
         .withMessage('Invalid email address')
         .normalizeEmail(),
@@ -87,7 +87,7 @@ export const applicationFormValidation = [
     body('lastName')
         .isString()
         .withMessage('Last name must be a string'),
-    body('emailAddress')
+    body('email')
         .isEmail()
         .withMessage('Invalid email address')
         .normalizeEmail(),

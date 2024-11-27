@@ -20,7 +20,7 @@ class FormService {
     console.log(decodedManager)
     const formData = await mailService.sendContactForm({...data, manager: decodedManager.id});
     const emailText = 'Vielen Dank für Ihr Vertrauen. Wir kümmern uns schnellstmöglich um Ihr Anliegen.'
-    await mailService.sendNotificationMail(data.emailAddress, emailText);
+    await mailService.sendNotificationMail(data.email, emailText);
     return formData;
   }
 }

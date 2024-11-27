@@ -36,7 +36,7 @@ class MailService {
       from: process.env.SMTP_USER,
       to: process.env.MAIL_OFICE,
 
-      subject: "Contact form for " + data.emailAddress,
+      subject: "Contact form for " + data.email,
       text: "",
       html: `
                     <div>
@@ -46,7 +46,7 @@ class MailService {
                             <li>Titel: ${data.titel}</li>
                             <li>Vorname: ${data.firstName}</li>
                             <li>Nachname: ${data.lastName}</li>
-                            <li>Email: ${data.emailAddress}</li>
+                            <li>Email: ${data.email}</li>
                             <li>Mobil: ${data.phoneNumber}</li>
                             <li>Straße: ${data.adress}</li>
                             <li>PLZ: ${data.zipCode}</li>
@@ -65,14 +65,14 @@ class MailService {
     const mailOptions = {
       from: process.env.SMTP_USER,
       to: process.env.MAIL_OFICE,
-      subject: "Application Form from " + data.emailAddress,
+      subject: "Application Form from " + data.email,
       text: "",
       html: `
         <div>
             <ul>
                 <li>Vorname: ${data.firstName}</li>
                 <li>Nachname: ${data.lastName}</li>
-                <li>Email: ${data.emailAddress}</li>
+                <li>Email: ${data.email}</li>
                 <li>Mobil: ${data.phoneNumber}</li>
                 <li>Communication method: ${data.communicationMethod}</li>
                 <li>Bemerkung: ${data.description}</li>
