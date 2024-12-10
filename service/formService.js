@@ -4,7 +4,6 @@ import mailService from "./mailService.js";
 
 class FormService {
   async sendContactForm(data) {
-    
     const decodedManager = await jwt.verify(
         data.manager,
         process.env.JWT_MANAGER_SECRET,

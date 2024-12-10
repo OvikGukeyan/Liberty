@@ -9,14 +9,14 @@ import userModel from "../models/userModel.js";
 
 class UserService {
     async registration(body) {
-        const {email, password, firstName, lastName, company, phone, address, city, zipCode, country} = body;
+        const {email, password, firstName, lastName, company, phoneNumber, address, city, zipCode, country} = body;
         const candidate = await UserModel.findOne({ email })
         if (candidate) {
             throw ApiError.BadRequest(`User with email ${email} already exists`)
         }
         const activationLink = uuidv4();
         const hashPassword = await bcryptjs.hash(password, 3);
-        const user = await UserModel.create({ email, password: hashPassword, firstName, lastName, phone, company, address, city, zipCode, country , activationLink })
+        const user = await UserModel.create({ email, password: hashPassword, firstName, lastName, phoneNumber, company, address, city, zipCode, country , activationLink })
         await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
 
         const userDto = new UserDto(user);

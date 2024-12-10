@@ -9,26 +9,26 @@ export const registrationValidation = [
         .isLength({ min: 3, max: 32 })
         .withMessage('Password must be between 3 and 32 characters'),
     body('firstName')
-        .isLength({ min: 3, max: 15 })
-        .withMessage('First name must be between 3 and 15 characters'),
+        .isLength({ min: 3 })
+        .withMessage('First name must be at least 3 characters'),
     body('lastName')
-        .isLength({ min: 3, max: 15 })
-        .withMessage('Last name must be between 3 and 15 characters'),
-    body('phone')
+        .isLength({ min: 3 })
+        .withMessage('Last name must be at least 3 characters'),
+    body('phoneNumber')
         .isMobilePhone()
         .withMessage('Invalid phone number'),
     body('address')
-        .isLength({ min: 3, max: 15 })
-        .withMessage('Address must be between 3 and 15 characters'),
+        .isLength({ min: 3 })
+        .withMessage('Address must be at least 3 characters'),
     body('city')
-        .isLength({ min: 3, max: 15 })
-        .withMessage('City must be between 3 and 15 characters'),
+        .isLength({ min: 3 })
+        .withMessage('City must be at least 3 characters'),
     body('zipCode')
         .isLength({ min: 3, max: 15 })
         .withMessage('Zip code must be between 3 and 15 characters'),
     body('country')
-        .isLength({ min: 3, max: 15 })
-        .withMessage('Country must be between 3 and 15 characters'),
+        .isLength({ min: 3 })
+        .withMessage('Country must be at least 3 characters'),
 ];
 
 export const formValidation = [

@@ -48,7 +48,7 @@ class MailService {
                             <li>Nachname: ${data.lastName}</li>
                             <li>Email: ${data.email}</li>
                             <li>Mobil: ${data.phoneNumber}</li>
-                            <li>Straße: ${data.adress}</li>
+                            <li>Straße: ${data.address}</li>
                             <li>PLZ: ${data.zipCode}</li>
                             <li>Ort: ${data.city}</li>
                             <li>Land: ${data.country}</li>
