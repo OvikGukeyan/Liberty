@@ -18,7 +18,7 @@ class ContactFormController {
         } catch (error) {
             next(error)
         }
-    }
+    };
 
 
     async sendApplicationForm(req, res, next) {
